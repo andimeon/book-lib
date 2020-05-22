@@ -1,0 +1,6 @@
+Jinja2==2.11.1
+more_itertools==8.2.0
+pathvalidate==2.2.2
+livereload==2.6.1
+requests==2.22.0
+beautifulsoup4==4.9.0
