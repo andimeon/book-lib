@@ -3,6 +3,7 @@ import json
 from livereload import Server, shell
 from more_itertools import chunked
 import os
+from urllib import parse
 
 
 def on_reload():
@@ -35,6 +36,15 @@ def get_books_pages():
     return [books_metadata[i: i + 10] for i in range(0, len(books_metadata), 10)]
 
 
+def get_url_quote(books):
+    for count, book in enumerate(books):
+        book_path = book['book_path']
+        img_path = book['img_src']
+        books[count]['book_path'] = parse.quote(book_path)
+        books[count]['img_src'] = parse.quote(img_path)
+    return books
+
+
 def get_pages_links(pages_numbers):
     pages_links = []
     for num in range(pages_numbers):
@@ -62,7 +72,8 @@ def get_next_page_link(count, pages_href):
 if __name__ == '__main__':
     os.makedirs('pages', exist_ok=True)
     with open('books_metadata.json', 'r') as file:
-        books_metadata = json.load(file)
+        books_metadata_json = json.load(file)
+    books_metadata = get_url_quote(books_metadata_json)
     
     server = Server()
     server.watch('pages/template.html', on_reload)
