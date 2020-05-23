@@ -4,6 +4,7 @@ from livereload import Server, shell
 from more_itertools import chunked
 import os
 from urllib import parse
+import glob
 
 BOOTSTRAP_FILE = {
     'css': 'bootstrap.min.css',
@@ -21,6 +22,7 @@ def on_reload():
     template = env.get_template('template.html')
     books_on_pages = get_books_pages()
     pages_href = get_pages_links(len(books_on_pages))
+    remove_files()
     
     for count, books_page in enumerate(books_on_pages):
         rendered_page = template.render(
@@ -82,6 +84,13 @@ def bootstrap_file_path():
     BOOTSTRAP_FILE['jquery'] = os.path.join('../static', BOOTSTRAP_FILE['jquery'])
     BOOTSTRAP_FILE['popper'] = os.path.join('../static', BOOTSTRAP_FILE['popper'])
     BOOTSTRAP_FILE['bootstrap'] = os.path.join('../static', BOOTSTRAP_FILE['bootstrap'])
+
+
+def remove_files():
+    pages_folder = os.path.join(os.getcwd(), 'pages/*')
+    files = files = glob.glob(pages_folder)
+    for file in files:
+        os.remove(file)
 
 
 if __name__ == '__main__':
