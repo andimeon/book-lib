@@ -21,7 +21,6 @@ def on_reload():
     template = env.get_template('template.html')
     books_on_pages = get_books_pages()
     pages_href = get_pages_links(len(books_on_pages))
-    bootstrap_file_path()
     
     for count, books_page in enumerate(books_on_pages):
         rendered_page = template.render(
@@ -33,7 +32,7 @@ def on_reload():
             page_number=count + 1,
         )
         if count == 0:
-            with open('pages/index.html', 'w', encoding="utf8") as file:
+            with open('index.html', 'w', encoding="utf8") as file:
                 file.write(rendered_page)
         else:
             with open(f'pages/index{count}.html', 'w', encoding="utf8") as file:
@@ -58,9 +57,9 @@ def get_pages_links(pages_numbers):
     pages_links = []
     for num in range(pages_numbers):
         if num == 0:
-            pages_links.append('index.html')
+            pages_links.append('../index.html')
         else:
-            pages_links.append(f'index{num}.html')
+            pages_links.append(f'../pages/index{num}.html')
     return pages_links
 
 
@@ -90,7 +89,9 @@ if __name__ == '__main__':
     with open('books_metadata.json', 'r') as file:
         books_metadata_json = json.load(file)
     books_metadata = get_url_quote(books_metadata_json)
+    bootstrap_file_path()
     
+    on_reload()
     server = Server()
     server.watch('template.html', on_reload)
-    server.serve(root='pages/')
+    server.serve(root='.')
