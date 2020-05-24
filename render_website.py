@@ -1,6 +1,6 @@
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 import json
-from livereload import Server, shell
+from livereload import Server
 from more_itertools import chunked
 import os
 from urllib import parse
@@ -33,12 +33,9 @@ def on_reload():
             next_page_href=get_next_page_link(count, pages_href),
             page_number=count + 1,
         )
-        if count == 0:
-            with open('index.html', 'w', encoding="utf8") as file:
-                file.write(rendered_page)
-        else:
-            with open(f'pages/index{count}.html', 'w', encoding="utf8") as file:
-                file.write(rendered_page)
+        
+        with open(f'pages/index{count}.html', 'w', encoding="utf8") as file:
+            file.write(rendered_page)
 
 
 def get_books_pages():
@@ -48,21 +45,15 @@ def get_books_pages():
 
 def get_url_quote(books):
     for count, book in enumerate(books):
-        book_path = os.path.join('..', book['book_path'])
-        img_path = os.path.join('..', book['img_src'])
+        book_path = os.path.join('../', book['book_path'])
+        img_path = os.path.join('../', book['img_src'])
         books[count]['book_path'] = parse.quote(book_path)
         books[count]['img_src'] = parse.quote(img_path)
     return books
 
 
 def get_pages_links(pages_numbers):
-    pages_links = []
-    for num in range(pages_numbers):
-        if num == 0:
-            pages_links.append('../index.html')
-        else:
-            pages_links.append(f'../pages/index{num}.html')
-    return pages_links
+    return [f'/pages/index{num}.html' for num in range(pages_numbers)]
 
 
 def get_previous_page_link(count, pages_href):
@@ -88,7 +79,7 @@ def bootstrap_file_path():
 
 def remove_files():
     pages_folder = os.path.join(os.getcwd(), 'pages/*')
-    files = files = glob.glob(pages_folder)
+    files = glob.glob(pages_folder)
     for file in files:
         os.remove(file)
 
