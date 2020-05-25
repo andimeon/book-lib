@@ -53,7 +53,7 @@ def get_url_quote(books):
 
 
 def get_pages_links(pages_numbers):
-    return [f'/pages/index{num}.html' for num in range(pages_numbers)]
+    return [f'../pages/index{num}.html' for num in range(pages_numbers)]
 
 
 def get_previous_page_link(count, pages_href):
