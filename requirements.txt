@@ -1,4 +1,4 @@
-Jinja2==2.11.1
+Jinja2==2.11.3
 more_itertools==8.2.0
 pathvalidate==2.2.2
 livereload==2.6.1
